@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter One — Eid 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Montserrat:wght@200;300;400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+ 
+    <style>
+        *, *::before, *::after { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+        }
+ 
+        :root {
+            --bg-dark: #0d0906; /* Candlelit deep warm brown */
+            --text-light: #f5ede0;
+            --accent-gold: #c9a96e;
+            --gold-light: #e8d5a3;
+            --transition-curve: cubic-bezier(0.76, 0, 0.24, 1);
+        }
+ 
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            padding: 120px 0 60px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+ 
+        /* Subtle noise overlay texture for consistency */
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 1000; opacity: 0.4;
+        }
+ 
+        /* Ambient soft gold backing glows */
+        .ambient-glow {
+            position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%);
+            width: 80vw; height: 80vw;
+            background: radial-gradient(circle, rgba(201, 169, 110, 0.04) 0%, transparent 70%);
+            pointer-events: none; z-index: 1;
+        }
+ 
+        /* ── FIXED NAVIGATION HEADER ── */
+        .nav-header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg-dark) 40%, transparent);
+        }
+ 
+        .back-nav {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: rgba(245, 237, 224, 0.6);
+            text-decoration: none;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.4s ease;
+        }
+        .back-nav span { font-size: 1rem; transition: transform 0.4s var(--transition-curve); display: inline-block; }
+        .back-nav:hover { color: var(--gold-light); }
+        .back-nav:hover span { transform: translateX(-4px); }
+ 
+        .chapter-title-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+        }
+ 
+        /* ── PAGE LAYOUT SECTIONS ── */
+        .lookbook-wrapper {
+            max-width: 1100px;
+            width: 100%;
+            padding: 0 40px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 120px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: chapterFadeIn 1.4s var(--transition-curve) forwards 0.2s;
+        }
+ 
+        @keyframes chapterFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+ 
+        @media (max-width: 768px) {
+            .lookbook-wrapper { padding: 0 20px; gap: 80px; }
+            .nav-header { padding: 20px; }
+        }
+ 
+              /* Global image & video framing rules */
+        .img-frame {
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid rgba(201, 169, 110, 0.12);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+            transition: transform 0.8s var(--transition-curve), border-color 0.6s ease, box-shadow 0.6s ease;
+        }
+        
+        /* Updated to target both images and videos inside frames seamlessly */
+        .img-frame img,
+        .img-frame video {
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* Keeps video perfectly proportioned inside the 3:4 portrait frame */
+            filter: sepia(0.18) brightness(0.92) contrast(1.02);
+            transition: transform 1.4s var(--transition-curve), filter 0.8s ease;
+        }
+        
+        .img-frame:hover {
+            transform: translateY(-4px);
+            border-color: rgba(201, 169, 110, 0.35);
+            box-shadow: 0 28px 55px rgba(0,0,0,0.7);
+        }
+        
+        .img-frame:hover img,
+        .img-frame:hover video { 
+            transform: scale(1.03); 
+            filter: sepia(0.05) brightness(0.98); 
+        }
+ 
+ 
+        /* Row 1: Split Intro Display */
+        .intro-row {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .intro-portrait { width: 100%; aspect-ratio: 3 / 4; }
+        .intro-title-block h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; line-height: 1.15; color: var(--text-light); margin-bottom: 20px;
+        }
+        .intro-title-block p {
+            font-size: 1.2rem; font-style: italic; color: var(--gold-light); letter-spacing: 1px;
+        }
+ 
+        /* Row 2: Editorial Mosaic Grid */
+        .mosaic-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(2, 240px);
+            gap: 20px;
+        }
+        .m-item-1 { grid-column: 1 / 5; grid-row: 1 / 3; } /* Tall Left */
+        .m-item-2 { grid-column: 5 / 9; grid-row: 1 / 2; } /* Top Center Wide */
+        .m-item-3 { grid-column: 9 / 13; grid-row: 1 / 3; } /* Tall Right */
+        .m-item-4 { grid-column: 5 / 9; grid-row: 2 / 3; } /* Bottom Center Wide */
+ 
+        /* Row 3: Narrative Centerpiece Split */
+        .narrative-row {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .narrative-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .nav-img { aspect-ratio: 1 / 1; }
+ 
+        /* Parchment Text Box Presentation */
+        .eid-message-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(201, 169, 110, 0.12);
+            padding: 50px 40px;
+            border-radius: 16px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .eid-message-box::before {
+            content: '✦'; position: absolute; top: 20px; right: 20px; font-size: 0.8rem; color: var(--accent-gold); opacity: 0.3;
+        }
+        .eid-message-box h2 {
+            font-size: 2.2rem; font-weight: 300; color: var(--gold-light); line-height: 1.2; margin-bottom: 30px;
+        }
+        .eid-message-box p {
+            font-size: 1.15rem; line-height: 2; color: rgba(245, 237, 224, 0.82); font-weight: 300; margin-bottom: 25px; letter-spacing: 0.2px;
+        }
+        .eid-message-box p:last-of-type { margin-bottom: 0; }
+ 
+        /* Row 4: Grand Landscape Anchor Break */
+        .showcase-row { width: 100%; }
+        .landscape-frame { width: 100%; aspect-ratio: 16 / 7; }
+ 
+        /* Scroll Animation Triggers */
+        [data-reveal] {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 1.2s ease, transform 1.2s var(--transition-curve);
+        }
+        [data-reveal].visible { opacity: 1; transform: translateY(0); }
+ 
+        /* Responsive Breakpoints Adaptability */
+        @media (max-width: 900px) {
+            .intro-row, .narrative-row { grid-template-columns: 1fr; text-align: center; }
+            .mosaic-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; gap: 15px; }
+            .m-item-1, .m-item-2, .m-item-3, .m-item-4 { grid-column: span 1; grid-row: auto; aspect-ratio: 1 / 1; }
+            .landscape-frame { aspect-ratio: 4 / 3; }
+        }
+    </style>
+</head>
+<body>
+ 
+    <div class="ambient-glow"></div>
+ 
+        <header class="nav-header">
+        <a href="index.html?back=true" class="back-nav"><span>←</span> Return Home</a>
+        <div class="chapter-title-tag">Chapter I</div>
+    </header>
+ 
+ 
+    <main class="lookbook-wrapper">
+        
+        <section class="intro-row">
+            <div class="img-frame intro-portrait">
+                <video autoplay loop muted playsinline aria-hidden="true">
+                    <source src="eid/video1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="intro-title-block">
+                <h1>Eid-ul-Fitr<br>With You</h1>
+                <p>May 2026 • A Memory in Gold</p>
+            </div>
+        </section>
+ 
+        <section class="mosaic-grid" data-reveal>
+            <div class="img-frame m-item-1">
+                <img src="eid/photo2.jpg" alt="Eid Canvas 2">
+            </div>
+            <div class="img-frame m-item-2">
+                <img src="eid/photo3.jpg" alt="Eid Canvas 3">
+            </div>
+            <div class="img-frame m-item-3">
+                <img src="eid/photo4.jpg" alt="Eid Canvas 4">
+            </div>
+            <div class="img-frame m-item-4">
+                <img src="eid/photo5.jpg" alt="Eid Canvas 5">
+            </div>
+        </section>
+ 
+        <section class="narrative-row">
+            <div class="narrative-grid" data-reveal>
+                <div class="img-frame nav-img">
+                    <img src="eid/photo6.jpg" alt="Eid Canvas 6">
+                </div>
+                <div class="img-frame nav-img">
+                    <img src="eid/photo7.jpg" alt="Eid Canvas 7">
+                </div>
+                <div class="img-frame nav-img">
+                    <img src="eid/photo8.jpg" alt="Eid Canvas 8">
+                </div>
+                <div class="img-frame nav-img">
+                    <img src="eid/photo9.jpg" alt="Eid Canvas 9">
+                </div>
+            </div>
+ 
+            <article class="eid-message-box" data-reveal>
+                <h2>First Down Many to Go......!!!!!</h2>
+                <p>Dressing up with the perfect clothes and I celebrated this beautiful day with you made it completely unforgettable. You brought a whole different kind of brightness to the EID This Year.</p>
+                <p>Seeing you happy is my absolute favorite sight in the world, and holding your hand through it all made me realize how lucky I am to have you by my side for every single celebration life brings us.</p>
+                <p>Thank you for making this day so incredibly warm and filled with light, my love.</p>
+            </article>
+        </section>
+ 
+        <section class="showcase-row" data-reveal>
+            <div class="img-frame landscape-frame">
+                <img src="eid/photo10.jpg" alt="Eid Horizon Canvas 10">
+            </div>
+        </section>
+ 
+    </main>
+ 
+    <script>
+        const revealEls = document.querySelectorAll('[data-reveal]');
+   
+ const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        revealEls.forEach(el => observer.observe(el));
+    </script>
+ 
+</body>
+</html>
+ 

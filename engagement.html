@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter Five — The Engagement</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+ 
+    <style>
+        *, *::before, *::after { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+        }
+ 
+        :root {
+            --bg-dark: #0d0906; /* Continuous candlelit dark brown */
+            --text-light: #f5ede0;
+            --accent-gold: #c9a96e;
+            --gold-light: #e8d5a3;
+            --transition-curve: cubic-bezier(0.76, 0, 0.24, 1);
+        }
+ 
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            padding: 120px 0 80px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+ 
+        /* Ambient noise overlay texture */
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 1000; opacity: 0.4;
+        }
+ 
+        /* Warm amber background glow */
+        .ambient-glow {
+            position: absolute; bottom: 10%; right: 10%;
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(201, 169, 110, 0.04) 0%, transparent 70%);
+            pointer-events: none; z-index: 1;
+        }
+ 
+        /* ── FIXED NAVIGATION HEADER ── */
+        .nav-header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg-dark) 40%, transparent);
+        }
+ 
+        .back-nav {
+            font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 3px;
+            color: rgba(245, 237, 224, 0.6); text-decoration: none; text-transform: uppercase;
+            display: flex; align-items: center; gap: 10px; transition: color 0.4s ease;
+        }
+        .back-nav span { font-size: 1rem; transition: transform 0.4s var(--transition-curve); display: inline-block; }
+        .back-nav:hover { color: var(--gold-light); }
+        .back-nav:hover span { transform: translateX(-4px); }
+ 
+        .chapter-title-tag {
+            font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 4px; color: var(--accent-gold); text-transform: uppercase;
+        }
+ 
+        /* ── LUXURY CONTENT CANVAS WRAPPER ── */
+        .engagement-wrapper {
+            max-width: 1100px;
+            width: 100%;
+            padding: 0 40px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 100px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: chapterFadeIn 1.4s var(--transition-curve) forwards 0.2s;
+        }
+ 
+        @keyframes chapterFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+ 
+        @media (max-width: 768px) {
+            .engagement-wrapper { padding: 0 20px; gap: 60px; }
+            .nav-header { padding: 20px; }
+        }
+ 
+        /* ── FLUSH COHESIVE FRAMING RULES ── */
+        .img-frame {
+            overflow: hidden;
+            border-radius: 20px;
+            border: 2px solid rgba(201, 169, 110, 0.12);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+            transition: transform 0.8s var(--transition-curve), border-color 0.6s ease, box-shadow 0.6s ease;
+        }
+        
+        .img-frame img,
+        .img-frame video {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: sepia(0.15) brightness(0.92) contrast(1.02);
+            transition: transform 1.4s var(--transition-curve), filter 0.8s ease;
+        }
+        
+        .img-frame:hover {
+            transform: translateY(-4px);
+            border-color: rgba(201, 169, 110, 0.35);
+            box-shadow: 0 28px 55px rgba(0,0,0,0.7);
+        }
+        
+        .img-frame:hover img,
+        .img-frame:hover video { 
+            transform: scale(1.03); 
+            filter: sepia(0.04) brightness(0.98); 
+        }
+ 
+       /* ROW 1: Panoramic Hero Opening Display (INCREASED SIZE) */
+        .engagement-hero {
+            width: 100%;
+            aspect-ratio: 16 / 12; /* Clean, tall cinematic photography canvas */
+            max-height: 95vh;
+        }
+ 
+        /* ROW 2: Split Portrait & Letter Display */
+        .engagement-split {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .split-portrait { width: 100%; aspect-ratio: 3 / 4; }
+ 
+        /* High-End Parchment Box */
+        .engagement-letter {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(201, 169, 110, 0.12);
+            padding: 55px 45px;
+            border-radius: 16px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .engagement-letter::before {
+            content: '✦'; position: absolute; top: 20px; right: 20px; font-size: 0.8rem; color: var(--accent-gold); opacity: 0.3;
+        }
+        .engagement-letter h4 {
+            font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 5px; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 15px;
+        }
+        .engagement-letter h2 {
+            font-size: clamp(2.2rem, 3vw, 2.8rem); font-weight: 300; color: var(--text-light); line-height: 1.2; margin-bottom: 35px;
+        }
+        .engagement-letter p {
+            font-size: clamp(1.1rem, 1.8vw, 1.25rem); line-height: 2; color: rgba(245, 237, 224, 0.82); font-weight: 300; margin-bottom: 25px; letter-spacing: 0.2px;
+        }
+        .engagement-letter p:last-of-type { margin-bottom: 0; }
+ 
+        /* NEW ROW 3: Duet Portrait Spread */
+        .duet-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        .duet-portrait {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+        }
+ 
+        /* NEW ROW 4: Cinematic Landscape Break */
+        .landscape-break {
+            width: 100%;
+            aspect-ratio: 16 / 6;
+        }
+ 
+        /* ROW 5: Elegant Details Trio Triptych */
+        .details-triptych {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .triptych-item { width: 100%; aspect-ratio: 4 / 3; }
+ 
+        /* Responsive Breakpoints Adaptability */
+        @media (max-width: 900px) {
+            .engagement-split { grid-template-columns: 1fr; gap: 50px; }
+            .duet-row { grid-template-columns: 1fr; gap: 20px; }
+            .engagement-hero, .landscape-break { aspect-ratio: 4 / 3; }
+            .details-triptych { grid-template-columns: 1fr; gap: 20px; }
+        }
+ 
+        /* Scroll Reveal Effect Configuration */
+        [data-reveal] {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 1.2s ease, transform 1.2s var(--transition-curve);
+        }
+        [data-reveal].visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+ 
+    <div class="ambient-glow"></div>
+ 
+    <header class="nav-header">
+        <a href="index.html?back=true" class="back-nav"><span>←</span> Return Home</a>
+        <div class="chapter-title-tag">Chapter V</div>
+    </header>
+ 
+    <main class="engagement-wrapper">
+        
+                <section class="img-frame engagement-hero">
+            <img src="engagement/photo1.jpg" alt="Hero Canvas Showcase">
+        </section>
+ 
+ 
+        <section class="engagement-split">
+            <div class="img-frame split-portrait" data-reveal>
+                <img src="engagement/photo2.jpg" alt="Primary Portrait Context">
+            </div>
+ 
+            <article class="engagement-letter" data-reveal>
+                <h4>The Forever Step</h4>
+                <h2>A Promise Sealed in Gold</h2>
+                <p>Of all the steps we took over the past year, this was the one that was precious of all.  That  ring onto your finger felt less like a new beginning and more like matching a missing piece perfectly of my life.</p>
+                <p>Seeing you shine under the lights, breathtaking Aura , made me realize that my greatest achievement will always simply be making you smile. This wasn't just an occasion; it is the forever promise that I am yours through every storm and every sunset.</p>
+                <p>Here is to the beautiful forever we are building out,and supporting each other forever and ever .</p>
+            </article>
+        </section>
+ 
+        <section class="duet-row" data-reveal>
+            <div class="img-frame duet-portrait">
+                <img src="engagement/photo3.jpg" alt="Duet Asset 3">
+            </div>
+            <div class="img-frame duet-portrait">
+                <img src="engagement/photo4.jpg" alt="Duet Asset 4">
+            </div>
+        </section>
+ 
+        <section class="img-frame landscape-break" data-reveal>
+            <img src="engagement/photo5.jpg" alt="Landscape Break Asset 5">
+        </section>
+ 
+        <section class="details-triptych" data-reveal>
+            <div class="img-frame triptych-item">
+                <img src="engagement/photo6.jpg" alt="Detail Asset 6">
+            </div>
+            <div class="img-frame triptych-item">
+                <img src="engagement/photo7.jpg" alt="Detail Asset 7">
+            </div>
+            <div class="img-frame triptych-item">
+                <img src="engagement/photo8.jpg" alt="Detail Asset 8">
+            </div>
+        </section>
+ 
+    </main>
+ 
+    <script>
+        const revealEls = document.querySelectorAll('[data-reveal]');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        revealEls.forEach(el => observer.observe(el));
+    </script>
+ 
+</body>
+</html>
+ 

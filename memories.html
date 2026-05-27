@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter Two — Memories</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+ 
+    <style>
+        *, *::before, *::after { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+        }
+ 
+        :root {
+            --bg-dark: #0d0906; /* Continuous candlelit dark brown */
+            --text-light: #f5ede0;
+            --accent-gold: #c9a96e;
+            --gold-light: #e8d5a3;
+            --transition-curve: cubic-bezier(0.76, 0, 0.24, 1);
+        }
+ 
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            padding: 120px 0 80px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+ 
+        /* Ambient noise overlay texture */
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 1000; opacity: 0.4;
+        }
+ 
+        /* Vertical Glowing Timeline Line */
+        .timeline-line {
+            position: fixed;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 1px; height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(201, 169, 110, 0.2) 20%, rgba(201, 169, 110, 0.2) 80%, transparent);
+            z-index: 1; pointer-events: none;
+        }
+ 
+        /* ── FIXED NAVIGATION HEADER ── */
+        .nav-header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg-dark) 40%, transparent);
+        }
+ 
+        .back-nav {
+            font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 3px;
+            color: rgba(245, 237, 224, 0.6); text-decoration: none; text-transform: uppercase;
+            display: flex; align-items: center; gap: 10px; transition: color 0.4s ease;
+        }
+        .back-nav span { font-size: 1rem; transition: transform 0.4s var(--transition-curve); display: inline-block; }
+        .back-nav:hover { color: var(--gold-light); }
+        .back-nav:hover span { transform: translateX(-4px); }
+ 
+        .chapter-title-tag {
+            font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 4px; color: var(--accent-gold); text-transform: uppercase;
+        }
+ 
+        /* ── MEMORIES CANVAS WRAPPER ── */
+        .memories-wrapper {
+            max-width: 1000px;
+            width: 100%;
+            padding: 40px 40px 0 40px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 140px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: chapterFadeIn 1.4s var(--transition-curve) forwards 0.2s;
+        }
+ 
+        @keyframes chapterFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+ 
+        /* ── ZIG-ZAG TIMELINE ROW LOGIC ── */
+        .memory-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 80px;
+            position: relative;
+        }
+ 
+        /* Reverses the layout for every even row */
+        .memory-row:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+ 
+        /* Gold center dot tracking the timeline */
+        .memory-row::after {
+            content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+            width: 11px; height: 11px; background: var(--bg-dark); border: 2px solid var(--accent-gold);
+            border-radius: 50%; z-index: 5; box-shadow: 0 0 15px rgba(201, 169, 110, 0.4);
+            transition: background 0.4s ease, transform 0.4s var(--transition-curve);
+        }
+        .memory-row:hover::after { background: var(--gold-light); transform: translate(-50%, -50%) scale(1.3); }
+ 
+        .memory-text {
+            flex: 1;
+            padding: 20px;
+        }
+        .memory-row:nth-child(odd) .memory-text { text-align: right; }
+        .memory-row:nth-child(even) .memory-text { text-align: left; }
+ 
+        .memory-date {
+            font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 3px; color: var(--accent-gold); display: block; margin-bottom: 15px; text-transform: uppercase;
+        }
+        .memory-text h3 {
+            font-size: 2.2rem; font-weight: 300; color: var(--text-light); margin-bottom: 20px; line-height: 1.2;
+        }
+        .memory-text p {
+            font-size: 1.15rem; line-height: 1.9; color: rgba(245, 237, 224, 0.75); font-weight: 300;
+        }
+ 
+        /* ── LUXURY POLAROID STYLING ── */
+        .memory-visual {
+            flex: 1;
+            display: flex;
+        }
+        .memory-row:nth-child(odd) .memory-visual { justify-content: flex-start; }
+        .memory-row:nth-child(even) .memory-visual { justify-content: flex-end; }
+ 
+        .polaroid-card {
+            background: #fbf9f5;
+            padding: 18px 18px 45px 18px;
+            border-radius: 4px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 380px;
+            transition: transform 0.8s var(--transition-curve), box-shadow 0.8s ease;
+            position: relative;
+        }
+ 
+        .polaroid-img-holder {
+            width: 100%; aspect-ratio: 1 / 2; overflow: hidden; background: #14110e; border: 1px solid rgba(0,0,0,0.05);
+        }
+	
+	/* Add this right under your .polaroid-img-holder styles */
+.polaroid-img-holder.landscape {
+    aspect-ratio: 4 / 3; /* Changes the frame from square to a wide horizontal layout */
+}
+ 
+        .polaroid-img-holder img {
+            width: 100%; height: 100%; object-fit: cover; filter: sepia(0.2) contrast(0.95) brightness(0.95);
+            transition: transform 1.2s var(--transition-curve), filter 0.8s ease;
+        }
+ 
+        .polaroid-caption {
+            position: absolute; bottom: 15px; left: 0; width: 100%;
+            font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.25rem; color: #2e2820; text-align: center; letter-spacing: 0.5px;
+        }
+ 
+        /* Organic Tilts */
+        .tilt-left { transform: rotate(-3deg) translateY(10px); }
+        .tilt-right { transform: rotate(3deg) translateY(-10px); }
+ 
+        .polaroid-card:hover {
+            transform: rotate(0deg) scale(1.05) translateY(-5px); z-index: 10;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .polaroid-card:hover img { filter: sepia(0.05) contrast(1) brightness(1); transform: scale(1.03); }
+ 
+        /* Mobile Adaptability */
+        @media (max-width: 900px) {
+            .timeline-line { left: 30px; transform: none; }
+            .memories-wrapper { padding: 40px 20px; gap: 80px; }
+            .memory-row, .memory-row:nth-child(even) { flex-direction: column; gap: 40px; text-align: left; }
+            .memory-row::after { left: 10px; top: 0; transform: none; }
+            .memory-text, .memory-row:nth-child(odd) .memory-text, .memory-row:nth-child(even) .memory-text { text-align: left; padding: 0 0 0 50px; }
+            .memory-visual, .memory-row:nth-child(odd) .memory-visual, .memory-row:nth-child(even) .memory-visual { justify-content: center; width: 100%; padding-left: 30px; }
+            .tilt-left, .tilt-right { transform: rotate(0); }
+        }
+ 
+        /* Scroll Reveal Configuration */
+        [data-reveal] {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 1.2s ease, transform 1.2s var(--transition-curve);
+        }
+        [data-reveal].visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+ 
+    <div class="timeline-line"></div>
+ 
+    <header class="nav-header">
+        <a href="index.html?back=true" class="back-nav"><span>←</span> Return Home</a>
+        <div class="chapter-title-tag">Chapter II</div>
+    </header>
+ 
+    <main class="memories-wrapper">
+        
+        <section class="memory-row" data-reveal>
+            <div class="memory-text">
+                <span class="memory-date">The Beginning</span>
+                <h3>How It All Started</h3>
+                <p>Looking back, it is almost funny how one regular day completely changed the course of everything.I Still remember talking to you and how I thought how can someone be soo Perfect and that was the day when I realized I finally found the One.</p>
+            </div>
+            <div class="memory-visual">
+                <div class="polaroid-card tilt-left">
+                    <div class="polaroid-img-holder">
+                        <img src="memories/photo1.jpg" alt="Memory 1">
+                    </div>
+                    <div class="polaroid-caption">Where it all began...</div>
+                </div>
+            </div>
+        </section>
+ 
+        <section class="memory-row" data-reveal>
+            <div class="memory-text">
+                <span class="memory-date">First Sunday Outing</span>
+                <h3>Greenland and Stunning Views</h3>
+                <p>What an awesome Day that was, We went to greenland and how Beautifully you were looking that Day. With you even a small path feels like an absolute journey to heavens </p>
+            </div>
+            <div class="memory-visual">
+                <div class="polaroid-card tilt-right">
+                    <div class="polaroid-img-holder landscape">
+                        <img src="memories/photo2.jpg" alt="Memory 2">
+                    </div>
+                    <div class="polaroid-caption">Our Midtown Getway.</div>
+                </div>
+            </div>
+        </section>
+ 
+        <section class="memory-row" data-reveal>
+            <div class="memory-text">
+                <span class="memory-date">Movie Sunday</span>
+                <h3>Chai & Joyfulness</h3>
+                <p>Watching Movies with you is joyous moment in my Life even a shit ass movies becomes a Blockbuster because I am in the same Space as you are.This was our First Movie together and I still remember how gorgeous and stunning you looked</p>
+            </div>
+            <div class="memory-visual">
+                <div class="polaroid-card tilt-left">
+                    <div class="polaroid-img-holder landscape">
+                        <img src="memories/photo3.jpg" alt="Memory 3">
+                    </div>
+                    <div class="polaroid-caption">My favorite kind of peace.</div>
+                </div>
+            </div>
+        </section>
+ 
+      <section class="memory-row" data-reveal>
+            <div class="memory-text">
+                <span class="memory-date">Celebrations</span>
+                <h3>First Restaurant</h3>
+                <p>If you remember we did first Twining and Recorded crazy videos in Marich. How Shy you were when you suggested the Restaurant you looked soo cute. You Know People Still Say this Day there was an Angel in Marich My Princess.</p>
+            </div>
+            <div class="memory-visual">
+                <div class="polaroid-card tilt-left">
+                    <div class="polaroid-img-holder landscape">
+                        <img src="memories/photo5.jpg" alt="Memory 5">
+                    </div>
+                    <div class="polaroid-caption">Absolutely stunning.</div>
+                </div>
+            </div>
+        </section>
+ 
+        <section class="memory-row" data-reveal>
+            <div class="memory-text">
+                <span class="memory-date">THE KHAKESIFA</span>
+                <h3>Building Forever</h3>
+                <p>From that very first day that we became offical to right now, every single memory is a core memeory in the foundation of us. I wouldn't trade a single second, a single laugh, or a single talk everything about us is special...!!!!!!l</p>
+            </div>
+            <div class="memory-visual">
+                <div class="polaroid-card tilt-right">
+                    <div class="polaroid-img-holder landscape">
+                        <img src="memories/photo6.jpg" alt="Memory 6">
+                    </div>
+                    <div class="polaroid-caption">To a million more Special Days </div>
+                </div>
+            </div>
+        </section>
+ 
+    </main>
+ 
+    <script>
+        const revealEls = document.querySelectorAll('[data-reveal]');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        revealEls.forEach(el => observer.observe(el));
+    </script>
+ 
+</body>
+</html>
+ x
+ 

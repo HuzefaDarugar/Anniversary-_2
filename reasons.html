@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Truth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+ 
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-dark: #0d0906; /* Matches your continuous dark candlelit theme */
+            --text-light: #f5ede0;
+            --accent-gold: #c9a96e;
+            --gold-light: #e8d5a3;
+            --transition-curve: cubic-bezier(0.76, 0, 0.24, 1);
+        }
+ 
+        body {
+            width: 100%;
+            height: 100vh;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Cormorant Garamond', serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 40px;
+            text-align: center;
+        }
+ 
+        /* Ambient subtle grain overlay to match premium aesthetic */
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 1000; opacity: 0.4;
+        }
+ 
+        .statement-container {
+            max-width: 750px;
+            opacity: 0;
+            transform: scale(0.98) translateY(10px);
+            animation: statementFadeIn 1.5s var(--transition-curve) forwards;
+        }
+ 
+        @keyframes statementFadeIn {
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+ 
+        .statement-ornament {
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+        }
+ 
+        /* The Rephrased Mic-Drop Statement */
+        h1 {
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 300;
+            line-height: 1.4;
+            color: var(--text-light);
+            margin-bottom: 40px;
+        }
+ 
+        /* Highlighting the romantic emphasis */
+        h1 span {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            letter-spacing: 6px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            margin-top: 25px;
+        }
+ 
+           /* Premium Return Button Layout */
+        .return-btn {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: rgba(245, 237, 224, 0.5);
+            text-decoration: none;
+            text-transform: uppercase;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+            padding: 14px 32px;
+            border-radius: 25px;
+            transition: all 0.4s var(--transition-curve);
+            display: inline-block;
+        }
+ 
+        .return-btn:hover {
+            color: var(--gold-light);
+            border-color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.01);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+ 
+    <main class="statement-container">
+        <div class="statement-ornament">✦</div>
+        
+        <h1>
+            You don't need a single fucking reason to be with her. She is totally awesome, completely irreplaceable, mind-blowing and my absolute angel.
+            <span>FATUU ROCKS </span>
+        </h1>
+ 
+        <a href="index.html" class="return-btn">Return Home</a>
+    </main>
+ 
+</body>
+</html>
+ 
+ 

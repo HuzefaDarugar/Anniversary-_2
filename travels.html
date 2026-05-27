@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter Three — Travels</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+ 
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-dark: #0d0906; --text-light: #f5ede0; --accent-gold: #c9a96e; 
+            --gold-light: #e8d5a3; --transition-curve: cubic-bezier(0.76, 0, 0.24, 1);
+        }
+        body {
+            width: 100%; min-height: 100vh; background-color: var(--bg-dark); color: var(--text-light);
+            font-family: 'Cormorant Garamond', serif; overflow-x: hidden; padding: 120px 0 80px 0;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 1000; opacity: 0.4;
+        }
+        .nav-header {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 30px 40px; display: flex;
+            justify-content: space-between; align-items: center; z-index: 100;
+            background: linear-gradient(to bottom, var(--bg-dark) 40%, transparent);
+        }
+        .back-nav {
+            font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 3px; color: rgba(245, 237, 224, 0.6);
+            text-decoration: none; text-transform: uppercase; display: flex; align-items: center; gap: 10px; transition: color 0.4s ease;
+        }
+        .back-nav span { font-size: 1rem; transition: transform 0.4s var(--transition-curve); display: inline-block; }
+        .back-nav:hover { color: var(--gold-light); }
+        .back-nav:hover span { transform: translateX(-4px); }
+        .chapter-title-tag { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 4px; color: var(--accent-gold); text-transform: uppercase; }
+ 
+        .travels-wrapper {
+            max-width: 1100px; width: 100%; padding: 0 40px; position: relative; z-index: 2;
+            display: flex; flex-direction: column; gap: 120px; opacity: 0; transform: translateY(20px);
+            animation: chapterFadeIn 1.4s var(--transition-curve) forwards 0.2s;
+        }
+        @keyframes chapterFadeIn { to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { .travels-wrapper { padding: 0 20px; gap: 80px; } .nav-header { padding: 20px; } }
+ 
+        .img-frame {
+            overflow: hidden; border-radius: 12px; border: 1px solid rgba(201, 169, 110, 0.12);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.5); transition: transform 0.8s var(--transition-curve), border-color 0.6s ease, box-shadow 0.6s ease;
+        }
+        .img-frame img {
+            width: 100%; height: 100%; object-fit: cover; filter: sepia(0.15) brightness(0.92) contrast(1.02);
+            transition: transform 1.4s var(--transition-curve), filter 0.8s ease;
+        }
+        .img-frame:hover { transform: translateY(-4px); border-color: rgba(201, 169, 110, 0.35); box-shadow: 0 28px 55px rgba(0,0,0,0.7); }
+        .img-frame:hover img { transform: scale(1.03); filter: sepia(0.04) brightness(0.98); }
+ 
+        .travels-hero { width: 100%; aspect-ratio: 16 / 9; max-height: 70vh; }
+ 
+        .journal-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(201, 169, 110, 0.12); padding: 60px 50px; border-radius: 16px;
+            max-width: 800px; margin: 0 auto; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.5); position: relative;
+        }
+        .journal-box::before {
+            content: '🧭'; position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+            background: var(--bg-dark); padding: 0 15px; font-size: 1.2rem; color: var(--accent-gold);
+        }
+        .journal-box h4 { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 5px; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 15px; }
+        .journal-box h2 { font-size: clamp(2.2rem, 3vw, 2.8rem); font-weight: 300; color: var(--text-light); line-height: 1.2; margin-bottom: 30px; }
+        .journal-box p { font-size: 1.2rem; line-height: 2; color: rgba(245, 237, 224, 0.82); font-weight: 300; }
+ 
+        .postcard-row { display: grid; grid-template-columns: 1.3fr 1fr; gap: 50px; align-items: center; }
+        .postcard-row.reversed { grid-template-columns: 1fr 1.3fr; }
+        .postcard-photo { width: 100%; aspect-ratio: 4 / 3; }
+        .postcard-photo.portrait { aspect-ratio: 3 / 4; max-width: 420px; margin: 0 auto; }
+ 
+        .postcard-meta { padding: 10px 0; }
+        .postcard-meta span { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 3px; color: var(--accent-gold); text-transform: uppercase; display: block; margin-bottom: 12px; }
+        .postcard-meta h3 { font-size: 1.8rem; font-weight: 300; color: var(--text-light); margin-bottom: 15px; line-height: 1.3; }
+        .postcard-meta p { font-size: 1.1rem; line-height: 1.8; color: rgba(245, 237, 224, 0.7); font-weight: 300; }
+ 
+        @media (max-width: 850px) {
+            .postcard-row, .postcard-row.reversed { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+            .postcard-row .postcard-meta { order: 2; }
+            .postcard-row .postcard-photo { order: 1; }
+        }
+ 
+        [data-reveal] { opacity: 0; transform: translateY(30px); transition: opacity 1.2s ease, transform 1.2s var(--transition-curve); }
+        [data-reveal].visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+ 
+    <header class="nav-header">
+        <a href="index.html?back=true" class="back-nav"><span>←</span> Return Home</a>
+        <div class="chapter-title-tag">Chapter III</div>
+    </header>
+ 
+    <main class="travels-wrapper">
+        
+        <section class="img-frame travels-hero">
+            <img src="travels/photo1.jpg" alt="Wanderlust Adventure Frame">
+        </section>
+ 
+        <section class="journal-box" data-reveal>
+            <h4>The Map of Us</h4>
+            <h2>Exploring the World Together</h2>
+            <p>Every ticket collected, every place discovered, every cafe we have been has been joyous journey  but every blurry map check  proved that exact same beautiful point is always besides you		: it doesn't matter where the destination takes us, as long as the seat right next to me is yours.</p>
+        </section>
+ 
+        <div class="postcard-row" data-reveal>
+            <div class="img-frame postcard-photo">
+                <img src="travels/photo2.jpg" alt="Travel Moment 2">
+            </div>
+            <div class="postcard-meta">
+                <span>01 // Escape</span>
+                <h3>Chasing Horizons</h3>
+                <p>Watching the Sunset and cycling through beautifully horizon , sitting side-by-side with absolutely angel and nowhere else to rush off to. A Dream </p>
+            </div>
+        </div>
+ 
+        <div class="postcard-row reversed" data-reveal>
+            <div class="postcard-meta">
+                <span>02 // Fashion </span>
+                <h3>My Aura Farming Cutiee</h3>
+                <p>Getting completely lost in trying our wierd quirks in public  but finding the most perfect quiet fashion bunny entirely by accident.</p>
+            </div>
+            <div class="img-frame postcard-photo portrait">
+                <img src="travels/photo3.jpg" alt="Travel Moment 3">
+            </div>
+        </div>
+ 
+        <div class="postcard-row" data-reveal>
+            <div class="img-frame postcard-photo">
+                <img src="travels/photo4.jpg" alt="Travel Moment 4">
+            </div>
+            <div class="postcard-meta">
+                <span>03 // Serenity</span>
+                <h3>By the Water's Edge</h3>
+                <p>The gentle, rhythmic sound of the tides and talking about our dreams until the stars slowly claims the dark night canvas.It just took diffcult too pathom how much perfect being you are my princess</p>
+            </div>
+        </div>
+ 
+        <div class="postcard-row reversed" data-reveal>
+            <div class="postcard-meta">
+                <span>04 // Warmth</span>
+                <h3>The Perfect Chapter</h3>
+                <p>Waking up in an entirely new city but feeling completely, beautifully at home simply looking across the café table.Playing Games and try different foods which are impossible to pronounce , because of you life is full of adventure and surprises.</p>
+            </div>
+            <div class="img-frame postcard-photo">
+                <img src="travels/photo5.jpg" alt="Travel Moment 5">
+            </div>
+        </div>
+ 
+        <div class="postcard-row" data-reveal>
+            <div class="img-frame postcard-photo portrait">
+                <img src="travels/photo6.jpg" alt="Travel Moment 6">
+            </div>
+            <div class="postcard-meta">
+                <span>05 // Adventure</span>
+                <h3>To the Highest Peak</h3>
+                <p>Breathing in that cold crisp near the highest statue , standing way up at the high ridge lines together, completely on top of the world.</p>
+            </div>
+        </div>
+ 
+        <div class="postcard-row reversed" data-reveal>
+            <div class="postcard-meta">
+                <span>06 // Culture</span>
+                <h3>Lost in the Space</h3>
+                <p>Navigating through busy shopping and foods  streets, surrounded by completely new sounds, with your hand anchoring me through the crowd and feeling that we are in totally null space where there is no one expects us in far far away world</p>
+            </div>
+            <div class="img-frame postcard-photo">
+                <img src="travels/photo7.png" alt="Travel Moment 7">
+            </div>
+        </div>
+ 
+        <div class="postcard-row" data-reveal>
+            <div class="img-frame postcard-photo">
+                <img src="travels/photo8.jpg" alt="Travel Moment 8">
+            </div>
+            <div class="postcard-meta">
+                <span>07 // Stillness</span>
+                <h3>Quiet Retreats</h3>
+                <p>Taking a breath away from the itinerary just to soak in the view, realizing the best scenery is the one right in front of me.</p>
+            </div>
+        </div>
+ 
+        <div class="postcard-row reversed" data-reveal>
+            <div class="postcard-meta">
+                <span>08 // Journey</span>
+                <h3>My Star</h3>
+                <p>The long transits and endless photo barrage to pick one perfect picture  that somehow never feel boring because every photo click with you is a future reason to be happy .</p>
+            </div>
+            <div class="img-frame postcard-photo portrait">
+                <img src="travels/photo9.jpg" alt="Travel Moment 9">
+            </div>
+        </div>
+ 
+        <div class="postcard-row" data-reveal>
+            <div class="img-frame postcard-photo">
+                <img src="travels/photo10.jpg" alt="Travel Moment 10">
+            </div>
+            <div class="postcard-meta">
+                <span>09 // Discovery</span>
+                <h3>Hidden Gems</h3>
+                <p>Finding that one tiny, perfect spot off the beat path that feels like it exists just for the two of us.</p>
+            </div>
+        </div>
+ 
+        <div class="postcard-row reversed" data-reveal>
+            <div class="postcard-meta">
+                <span>10 // Forever</span>
+                <h3>Until the Next Flight</h3>
+                <p>Packing bags and getting separated is toughest part of our journey  with lot of  memories every single time, already planning out the next pins we will drop on the world map.</p>
+            </div>
+            <div class="img-frame postcard-photo">
+                <img src="travels/photo11.jpg" alt="Travel Moment 11">
+            </div>
+        </div>
+ 
+    </main>
+ 
+    <script>
+        const revealEls = document.querySelectorAll('[data-reveal]');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        revealEls.forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
+ 
+ 

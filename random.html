@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Things She Said</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+ 
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-dark: #0d0906;
+            --text-light: #f5ede0;
+            --accent-gold: #c9a96e;
+            --gold-light: #e8d5a3;
+            --transition-curve: cubic-bezier(0.76, 0, 0.24, 1);
+        }
+ 
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+ 
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 1000; opacity: 0.4;
+        }
+ 
+        /* ── SECURITY PORTAL LAYER ── */
+        .lock-overlay {
+            position: fixed; inset: 0; background-color: var(--bg-dark);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 2000; transition: opacity 0.8s var(--transition-curve), visibility 0.8s;
+        }
+        .lock-overlay.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+        
+        .lock-card {
+            background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(201, 169, 110, 0.15);
+            padding: 50px 40px; border-radius: 16px; backdrop-filter: blur(20px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4); text-align: center; max-width: 400px; width: 100%;
+        }
+        .lock-card h2 { font-family: 'Cinzel', serif; font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 25px; color: var(--accent-gold); text-transform: uppercase; }
+        
+        .pass-input-wrapper { position: relative; margin-bottom: 20px; }
+        .pass-input {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(201, 169, 110, 0.3);
+            padding: 12px 0; color: var(--text-light); font-family: 'Cinzel', serif; font-size: 1.1rem;
+            letter-spacing: 6px; text-align: center; outline: none; transition: border-color 0.4s ease;
+        }
+        .pass-input:focus { border-color: var(--gold-light); }
+        
+        .lock-btn {
+            font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 2px; color: var(--bg-dark);
+            background-color: var(--accent-gold); border: none; padding: 12px 30px; border-radius: 20px;
+            cursor: pointer; text-transform: uppercase; transition: all 0.4s ease; width: 100%;
+        }
+        .lock-btn:hover { background-color: var(--gold-light); box-shadow: 0 0 15px rgba(201,169,110,0.3); }
+        .error-msg { color: #d9534f; font-size: 0.9rem; margin-top: 10px; min-height: 20px; font-style: italic; opacity: 0; transition: opacity 0.3s; }
+ 
+        /* ── FIXED NAVIGATION HEADER ── */
+        .nav-header {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 30px 40px; display: flex;
+            justify-content: space-between; align-items: center; z-index: 100;
+            background: linear-gradient(to bottom, var(--bg-dark) 40%, transparent);
+        }
+        .back-nav {
+            font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 3px; color: rgba(245, 237, 224, 0.6);
+            text-decoration: none; text-transform: uppercase; display: flex; align-items: center; gap: 10px; transition: color 0.4s ease;
+        }
+        .back-nav span { font-size: 1rem; transition: transform 0.4s var(--transition-curve); display: inline-block; }
+        .back-nav:hover { color: var(--gold-light); }
+        .back-nav:hover span { transform: translateX(-4px); }
+        .chapter-title-tag { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 4px; color: var(--accent-gold); text-transform: uppercase; }
+ 
+        /* ── MAIN CONTENT CONTAINER (Hidden until unlocked) ── */
+        .page-content-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.2s var(--transition-curve), transform 1.2s var(--transition-curve);
+        }
+        .page-content-wrapper.show { opacity: 1; transform: translateY(0); }
+ 
+        /* ── FLEXBOX MASONRY SCREENSHOT ENGINE ── */
+        .scatter-grid {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 20px;
+            margin: 10px auto 0 auto !important;
+            padding-top: 0 !important;
+            justify-content: center;
+        }
+ 
+        .polaroid-screenshot {
+            background-color: #f7f4ef;
+            padding: 14px 14px 28px 14px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.7);
+            border-radius: 2px;
+            flex: 1 1 calc(33.333% - 30px); 
+            max-width: calc(33.333% - 20px);
+            min-width: 280px;
+            height: max-content;
+            transition: transform 0.5s var(--transition-curve), box-shadow 0.5s ease;
+            cursor: zoom-in;
+        }
+ 
+        .polaroid-img-box {
+            width: 100%;
+            background: #111;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 1px;
+        }
+ 
+        .polaroid-screenshot img { width: 100%; height: auto; display: block; filter: contrast(1.02) brightness(0.98); }
+ 
+        /* NATURAL ROTATION TILTS */
+        .polaroid-screenshot:nth-child(3n+1) { transform: rotate(-2deg); }
+        .polaroid-screenshot:nth-child(3n+2) { transform: rotate(2deg); }
+        .polaroid-screenshot:nth-child(3n+3) { transform: rotate(-1deg); }
+ 
+        .polaroid-screenshot:hover {
+            transform: scale(1.04) rotate(0deg) translateY(-8px) !important;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            z-index: 10;
+        }
+ 
+        @media (max-width: 900px) { .polaroid-screenshot { flex: 1 1 calc(50% - 30px); max-width: calc(50% - 15px); } }
+        @media (max-width: 600px) { .scatter-grid { gap: 25px; } .polaroid-screenshot { flex: 1 1 100%; max-width: 100%; transform: rotate(0deg) !important; } }
+    </style>
+</head>
+<body>
+ 
+    <div class="lock-overlay" id="lockScreen">
+        <div class="lock-card">
+            <h2>Access Archive</h2>
+            <div class="pass-input-wrapper">
+                <input type="password" class="pass-input" id="passField" placeholder="••••••••" autocomplete="off">
+            </div>
+            <button class="lock-btn" onclick="verifyAccess()">Unlock Quotes</button>
+            <div class="error-msg" id="errArea">Incorrect Passcode</div>
+        </div>
+    </div>
+ 
+    <header class="nav-header">
+        <a href="index.html" class="back-nav"><span>←</span> Return Home</a>
+        <div class="chapter-title-tag">The Quotebook</div>
+    </header>
+ 
+    <div class="page-content-wrapper" id="mainContent">
+        
+        <div style="width: 100%; text-align: center; padding: 110px 20px 20px 20px; box-sizing: border-box;">
+            <h1 style="color: #f5ede0 !important; font-family: 'Cinzel', serif; font-size: 2.4rem; font-weight: 400; letter-spacing: 2px; margin: 0 0 10px 0; text-transform: uppercase;">Moments in Writing</h1>
+            <p style="color: rgba(245, 237, 224, 0.55) !important; font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; line-height: 1.4; max-width: 580px; margin: 0 auto;">A completely uncurated collection of texts, comments, and reminders that I screen-capped because they made me smile.</p>
+        </div>
+ 
+        <section class="scatter-grid">
+            <div class="polaroid-screenshot">
+                <div class="polaroid-img-box"><img src="quotes/quote1.jpg" alt="Fatu Quote 1"></div>
+            </div>
+            <div class="polaroid-screenshot">
+                <div class="polaroid-img-box"><img src="quotes/quote2.jpg" alt="Fatu Quote 2"></div>
+            </div>
+            <div class="polaroid-screenshot">
+                <div class="polaroid-img-box"><img src="quotes/quote3.jpg" alt="Fatu Quote 3"></div>
+            </div>
+            <div class="polaroid-screenshot">
+                <div class="polaroid-img-box"><img src="quotes/quote4.jpg" alt="Fatu Quote 4"></div>
+            </div>
+            <div class="polaroid-screenshot">
+                <div class="polaroid-img-box"><img src="quotes/quote5.jpg" alt="Fatu Quote 5"></div>
+            </div>
+            <div class="polaroid-screenshot">
+                <div class="polaroid-img-box"><img src="quotes/quote6.jpg" alt="Fatu Quote 6"></div>
+            </div>
+        </section>
+ 
+    </div>
+ 
+    <script>
+        function verifyAccess() {
+            const inputVal = document.getElementById('passField').value.trim().toUpperCase();
+            const errorLabel = document.getElementById('errArea');
+            
+            if(inputVal === "FATZEFA") {
+                document.getElementById('lockScreen').classList.add('unlocked');
+                document.getElementById('mainContent').classList.add('show');
+            } else {
+                errorLabel.style.opacity = '1';
+                document.getElementById('passField').value = '';
+                setTimeout(() => { errorLabel.style.opacity = '0'; }, 2000);
+            }
+        }
+ 
+        document.getElementById('passField').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') { verifyAccess(); }
+        });
+    </script>
+ 
+</body>
+</html>
+ 
